@@ -1,0 +1,17 @@
+<div class="todo-card">
+  <h3>To-Do pour cette session</h3>
+  <div class="add">
+    <input type="text" placeholder="Nouvelle leçon..." [(ngModel)]="newText" (keydown.enter)="add()">
+    <button (click)="add()">Add</button>
+  </div>
+
+  <ul>
+    <li *ngFor="let t of todo.todos()">
+      <input type="checkbox" [checked]="t.done" (change)="toggle(t.id)">
+      <span [class.done]="t.done">{{ t.text }}</span>
+      <button (click)="remove(t.id)">✕</button>
+    </li>
+  </ul>
+
+  <button (click)="clearDone()">Supprimer terminés</button>
+</div>

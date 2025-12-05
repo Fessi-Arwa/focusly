@@ -1,0 +1,17 @@
+<div class="timer-card" role="region" aria-label="Timer">
+  <div class="set-area">
+    <label for="minutes">Minutes</label>
+    <input id="minutes" type="number" min="1" [(ngModel)]="minutes">
+    <button (click)="start()">Start</button>
+  </div>
+
+  <div class="time-big" aria-live="polite">
+    {{ formatTime(timer.remaining()) }}
+  </div>
+
+  <div class="controls">
+    <button *ngIf="timer.running()" (click)="pause()">Pause</button>
+    <button *ngIf="!timer.running() && timer.remaining()>0" (click)="resume()">Resume</button>
+    <button (click)="reset()">Reset</button>
+  </div>
+</div>

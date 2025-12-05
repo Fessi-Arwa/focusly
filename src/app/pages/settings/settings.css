@@ -1,0 +1,15 @@
+body[data-bg="default"] {
+  background: linear-gradient(90deg,#1c2138,#3b3f8a);
+}
+
+body[data-bg="bg-forest"] {
+  background-image: url('/assets/backgrounds/forest.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+body[data-bg="bg-library"] {
+  background-image: url('/assets/backgrounds/library.jpg');
+  background-size: cover;
+  background-position: center;
+}

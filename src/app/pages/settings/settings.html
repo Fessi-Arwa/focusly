@@ -1,0 +1,6 @@
+<h2>Choisir le fond</h2>
+<div class="gallery">
+  <button *ngFor="let b of backgrounds" (click)="setBg(b.id)">
+    {{ b.label }}
+  </button>
+</div>
