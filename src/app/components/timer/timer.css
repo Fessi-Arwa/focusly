@@ -1,47 +1,116 @@
 .timer-card {
   max-width: 520px;
-  margin: 12px auto;
-  padding: 18px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.04);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  text-align:center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  text-align: center;
+  animation: slideUp 0.5s ease-out;
+}
 
-  .set-area {
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    align-items:center;
-    margin-bottom: 14px;
-    input {
-      width:80px;
-      padding:6px 8px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,0.08);
-      background:transparent;
-      color:inherit;
-    }
-    button.start {
-      padding:8px 12px;
-      border-radius:8px;
-      cursor:pointer;
-    }
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-
-  .time-big {
-    font-size:56px;
-    font-weight:700;
-    margin: 10px 0 16px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .controls {
-    display:flex;
-    gap:8px;
-    justify-content:center;
-    button {
-      padding:8px 12px;
-      border-radius:8px;
-      cursor:pointer;
-    }
+.timer-card .set-area {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.timer-card .set-area label {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.timer-card input {
+  width: 80px;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.timer-card input:focus {
+  background: rgba(94, 114, 228, 0.15);
+  border-color: var(--primary);
+}
+
+.timer-card button.start {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), #825ee4);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(94, 114, 228, 0.3);
+}
+
+.timer-card button.start:hover {
+  box-shadow: 0 6px 20px rgba(94, 114, 228, 0.4);
+}
+
+.timer-card .time-big {
+  font-size: 4rem;
+  font-weight: 700;
+  margin: 1rem 0 2rem;
+  background: linear-gradient(135deg, #5e72e4, #825ee4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-card .controls {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.timer-card button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
+  color: var(--text-light);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.timer-card button:hover {
+  background: rgba(94, 114, 228, 0.2);
+  border-color: var(--primary);
+  color: #7c8cff;
+}
+
+@media (max-width: 768px) {
+  .timer-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .timer-card .time-big {
+    font-size: 3rem;
+  }
+  
+  .timer-card .set-area {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 }

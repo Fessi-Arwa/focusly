@@ -1,1 +1,162 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.css */
+
+/* Modern CSS Reset & Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Palette pastel douce et féminine */
+  --primary: #FFB7C5; /* Rose poudré */
+  --primary-light: #FFD1DC; /* Rose très clair */
+  --primary-dark: #E8A4B2; /* Rose doux */
+  --secondary: #B5EAD7; /* Vert menthe pastel */
+  --accent: #C7CEEA; /* Bleu lavande */
+  --accent-pink: #FFDAC1; /* Pêche doux */
+  --accent-lavender: #E2D1F9; /* Lavande */
+  
+  /* Neutres doux */
+  --bg-primary: rgba(255, 250, 250, 0.95); /* Fond blanc rosé */
+  --bg-secondary: rgba(255, 245, 245, 0.8); /* Fond rose très pâle */
+  --bg-card: rgba(255, 252, 252, 0.9); /* Blanc cassé */
+  --bg-card-hover: rgba(255, 240, 245, 0.95); /* Rose très léger */
+  
+  /* Textes */
+  --text-primary: #5D5D5D; /* Gris doux */
+  --text-secondary: #8A8A8A; /* Gris clair */
+  --text-muted: #B8B8B8; /* Gris très clair */
+  --text-dark: #4A4A4A; /* Gris foncé doux */
+  
+  /* Bordures et ombres douces */
+  --border-color: rgba(255, 182, 193, 0.2); /* Rose transparent */
+  --border-radius: 20px;
+  --border-radius-sm: 12px;
+  --border-radius-lg: 28px;
+  
+  /* Ombres très subtiles */
+  --shadow-sm: 0 2px 8px rgba(255, 182, 193, 0.1);
+  --shadow-md: 0 4px 16px rgba(255, 182, 193, 0.15);
+  --shadow-lg: 0 8px 24px rgba(255, 182, 193, 0.2);
+  --shadow-xl: 0 12px 32px rgba(255, 182, 193, 0.25);
+  
+  /* Transitions douces */
+  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Quicksand', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FFF5F5 0%, #FFF0F5 100%);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Effet de texture délicate */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(255, 214, 220, 0.3) 0%, transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(181, 234, 215, 0.2) 0%, transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(199, 206, 234, 0.2) 0%, transparent 20%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Glass morphism féminin */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(255, 182, 193, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Scrollbar élégant */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 214, 220, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles */
+*:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Styles de base pour les inputs et boutons */
+input, button, textarea, select {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  transition: var(--transition-normal);
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary) !important;
+  background: rgba(255, 183, 197, 0.1);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition-normal);
+}
+
+a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}

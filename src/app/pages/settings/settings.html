@@ -1,6 +1,209 @@
-<h2>Choisir le fond</h2>
-<div class="gallery">
-  <button *ngFor="let b of backgrounds" (click)="setBg(b.id)">
-    {{ b.label }}
-  </button>
+<div class="settings-container">
+  <!-- Header -->
+  <header class="settings-header">
+    <h1>⚙️ Paramètres</h1>
+    <p class="subtitle">
+      Personnalisez votre expérience Focusly
+    </p>
+  </header>
+
+  <!-- Navigation de retour -->
+  <div class="back-nav">
+    <a routerLink="/" class="back-btn">
+      <span class="back-icon">←</span>
+      <span>Retour au focus</span>
+    </a>
+  </div>
+
+  <!-- Settings Grid -->
+  <div class="settings-grid">
+    <!-- Background Selection -->
+    <section class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">🎨</div>
+        <h2 class="card-title">Arrière-plan</h2>
+      </div>
+      
+      <p class="card-description">
+        Choisissez un fond qui vous inspire
+      </p>
+      
+      <div class="background-gallery">
+        @for (bg of getBackgrounds(); track bg.id) {
+          <div 
+            class="background-item"
+            [class.active]="isActive(bg.id)"
+            (click)="setBg(bg.id)"
+            [style.background]="getBackgroundColor(bg.id)"
+            [attr.aria-label]="'Choisir ' + bg.label"
+          >
+            <div class="background-preview">
+              <span>{{ bg.icon }}</span>
+            </div>
+            <span class="background-label">{{ bg.label }}</span>
+            @if (isActive(bg.id)) {
+              <div class="active-indicator">✓</div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Timer Settings -->
+    <section class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">⏱️</div>
+        <h2 class="card-title">Timer</h2>
+      </div>
+      
+      <div class="setting-group">
+        <label class="setting-label">Durée Focus</label>
+        <div class="time-input">
+          <input 
+            type="number" 
+            min="5" 
+            max="90" 
+            [(ngModel)]="timerSettings.focusDuration"
+            (change)="saveSettings()"
+          >
+          <span class="time-unit">minutes</span>
+        </div>
+      </div>
+      
+      <div class="setting-group">
+        <label class="setting-label">Pause courte</label>
+        <div class="time-input">
+          <input 
+            type="number" 
+            min="1" 
+            max="15" 
+            [(ngModel)]="timerSettings.shortBreak"
+            (change)="saveSettings()"
+          >
+          <span class="time-unit">minutes</span>
+        </div>
+      </div>
+      
+      <div class="setting-group">
+        <label class="setting-label">Pause longue</label>
+        <div class="time-input">
+          <input 
+            type="number" 
+            min="5" 
+            max="30" 
+            [(ngModel)]="timerSettings.longBreak"
+            (change)="saveSettings()"
+          >
+          <span class="time-unit">minutes</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sound Settings -->
+    <section class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">🔊</div>
+        <h2 class="card-title">Sons</h2>
+      </div>
+      
+      <div class="toggle-group">
+        <div class="toggle-item">
+          <div class="toggle-label">
+            <span class="toggle-icon">🎵</span>
+            <span class="toggle-text">Activer les sons</span>
+          </div>
+          <label class="toggle-switch">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="timerSettings.soundEnabled"
+              (change)="saveSettings()"
+            >
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="setting-group">
+        <label class="setting-label">Son de notification</label>
+        <div class="sound-grid">
+          @for (sound of sounds; track sound.id) {
+            <div 
+              class="sound-option"
+              [class.active]="selectedSound === sound.id"
+              (click)="selectedSound = sound.id; saveSettings()"
+            >
+              <span class="sound-icon">{{ sound.icon }}</span>
+              <span class="sound-name">{{ sound.name }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Auto Start Settings -->
+    <section class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">⚡</div>
+        <h2 class="card-title">Démarrage automatique</h2>
+      </div>
+      
+      <div class="toggle-group">
+        <div class="toggle-item">
+          <div class="toggle-label">
+            <span class="toggle-icon">🔄</span>
+            <span class="toggle-text">Auto-start pauses</span>
+          </div>
+          <label class="toggle-switch">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="timerSettings.autoStartBreaks"
+              (change)="saveSettings()"
+            >
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        
+        <div class="toggle-item">
+          <div class="toggle-label">
+            <span class="toggle-icon">🎯</span>
+            <span class="toggle-text">Auto-start focus</span>
+          </div>
+          <label class="toggle-switch">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="timerSettings.autoStartFocus"
+              (change)="saveSettings()"
+            >
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <section class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">⚙️</div>
+        <h2 class="card-title">Actions</h2>
+      </div>
+      
+      <div class="action-buttons">
+        <button 
+          class="action-btn primary"
+          (click)="saveSettings()"
+        >
+          <span class="action-icon">💾</span>
+          <span>Sauvegarder</span>
+        </button>
+        
+        <button 
+          class="action-btn secondary"
+          (click)="resetSettings()"
+        >
+          <span class="action-icon">🔄</span>
+          <span>Réinitialiser</span>
+        </button>
+      </div>
+    </section>
+  </div>
 </div>

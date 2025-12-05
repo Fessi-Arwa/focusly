@@ -1,9 +1,25 @@
-<nav class="app-header">
-  <div class="logo">Focusly</div>
-  <ul>
-    <li><a routerLink="/">Focus</a></li>
-    <li><a routerLink="/settings">Settings</a></li>
-  </ul>
-</nav>
+<div class="app-container">
+  <!-- Header -->
+  <header class="app-header glass">
+    <div class="logo">
+      <a routerLink="/" class="logo-link">🌸 Focusly</a>
+    </div>
+    
 
-<router-outlet></router-outlet>
+    
+    <div class="user-profile">
+      <div class="avatar">É</div>
+      <span>Étudiant</span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="app-main">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer simplifié -->
+  <footer class="app-footer">
+    <p>🌸 Focusly - Conçu avec amour pour les étudiants</p>
+  </footer>
+</div>

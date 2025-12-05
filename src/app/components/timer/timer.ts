@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TimerService } from '../../services/timer';
+import { Timer } from '../../services/timer';
 
 @Component({
   selector: 'app-timer',
@@ -13,7 +13,7 @@ import { TimerService } from '../../services/timer';
 export class TimerComponent {
   minutes = Number(localStorage.getItem('focusly_last_minutes') || 25);
 
-  constructor(public timer: TimerService) {}
+  constructor(public timer: Timer) {}
 
   start() {
     const mins = Math.max(1, Math.floor(this.minutes));
@@ -23,7 +23,7 @@ export class TimerComponent {
 
   pause() { this.timer.pause(); }
   resume() { this.timer.resume(); }
-  reset() { this.timer.reset(0); }
+  reset() { this.timer.reset(); }
 
   formatTime(sec: number) {
     const m = Math.floor(sec / 60).toString().padStart(2, '0');

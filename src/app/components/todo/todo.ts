@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TodoService } from '../../services/todo';
+import { Todo } from '../../services/todo';
 
 @Component({
   selector: 'app-todo',
@@ -13,7 +13,7 @@ import { TodoService } from '../../services/todo';
 export class TodoComponent {
   newText = '';
 
-  constructor(public todo: TodoService) {}
+  constructor(public todo: Todo) {}
 
   add() {
     const t = this.newText.trim();

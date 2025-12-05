@@ -1,12 +1,21 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Background } from './services/background';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App {
-  protected readonly title = signal('focusly');
+export class App implements OnInit {
+  title = 'Focusly';
+  
+  constructor(private bg: Background) {}
+  
+  ngOnInit(): void {
+    this.bg.apply();
+  }
 }

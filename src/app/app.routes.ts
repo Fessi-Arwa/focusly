@@ -1,9 +1,20 @@
 import { Routes } from '@angular/router';
-import { FocusComponent } from './pages/focus/focus';
-import { SettingsComponent } from './pages/settings/settings';
+import { Focus } from './pages/focus/focus';
+import { Settings } from './pages/settings/settings';
 
 export const routes: Routes = [
-  { path: '', component: FocusComponent },
-  { path: 'settings', component: SettingsComponent },
-  { path: '**', redirectTo: '' }
+  { 
+    path: '', 
+    component: Focus,
+    title: 'Focusly - Votre espace de concentration'
+  },
+  { 
+    path: 'settings', 
+    component: Settings,
+    title: 'Focusly - Paramètres'
+  },
+  { 
+    path: '**', 
+    redirectTo: '' 
+  }
 ];

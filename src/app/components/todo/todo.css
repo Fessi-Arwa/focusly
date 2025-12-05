@@ -1,0 +1,315 @@
+.focus-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  min-height: calc(100vh - 70px);
+  align-items: start;
+}
+
+/* Timer Card */
+.timer-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.timer-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.timer-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #5e72e4, #825ee4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.timer-header p {
+  color: rgba(248, 249, 250, 0.7);
+  font-size: 1rem;
+}
+
+.time-big {
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 1rem 0 2rem;
+  background: linear-gradient(135deg, #5e72e4, #825ee4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-setup {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.timer-setup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.timer-setup input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.quick-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.quick-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: rgba(94, 114, 228, 0.2);
+  border: 1px solid rgba(94, 114, 228, 0.3);
+  color: #7c8cff;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.quick-buttons button:hover {
+  background: rgba(94, 114, 228, 0.3);
+  border-color: var(--primary);
+}
+
+.timer-controls {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primary-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), #825ee4);
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 15px rgba(94, 114, 228, 0.3);
+}
+
+.secondary-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.reset-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  background: rgba(255, 107, 107, 0.2);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+/* Todo Card */
+.todo-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-header {
+  margin-bottom: 1.5rem;
+}
+
+.todo-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.todo-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.todo-input input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+}
+
+.add-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), #825ee4);
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 15px rgba(94, 114, 228, 0.3);
+}
+
+.todo-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+}
+
+.todo-list ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.todo-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.todo-list li:hover {
+  background: rgba(94, 114, 228, 0.1);
+  border-color: var(--primary);
+}
+
+.todo-list input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.todo-list span {
+  flex: 1;
+  word-break: break-word;
+}
+
+.todo-list span.done {
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.delete-btn {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  font-size: 0.9rem;
+}
+
+.empty {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  justify-content: center;
+}
+
+.todo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.clear-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: rgba(45, 206, 137, 0.2);
+  color: #2dce89;
+  border: 1px solid rgba(45, 206, 137, 0.3);
+  font-size: 0.9rem;
+}
+
+.counter {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Navigation */
+.focus-nav {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  background: rgba(28, 33, 56, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;
+  z-index: 100;
+}
+
+.focus-nav a {
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  color: var(--text-light);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.focus-nav a:hover {
+  background: rgba(94, 114, 228, 0.2);
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .focus-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .time-big {
+    font-size: 3rem;
+  }
+  
+  .timer-card, .todo-card {
+    padding: 1.5rem;
+  }
+  
+  .focus-nav {
+    bottom: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}

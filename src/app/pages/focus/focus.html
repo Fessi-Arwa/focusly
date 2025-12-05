@@ -1,9 +1,275 @@
-<div class="focus-page">
-  <main class="left">
-    <app-timer></app-timer>
-  </main>
+<div class="focus-container">
+  <!-- Left Column - Timer -->
+  <div class="timer-column">
+    <!-- Timer Card -->
+    <div class="timer-card">
+      <!-- Timer Header -->
+      <div class="timer-header">
+        <div class="mode-indicator">
+          <span class="mode-emoji">{{ getModeEmoji() }}</span>
+          <span class="mode-title">{{ getModeTitle() }}</span>
+        </div>
+        <h2>Focus Timer</h2>
+      </div>
 
-  <aside class="right">
-    <app-todo></app-todo>
-  </aside>
+      <!-- Timer Display -->
+      <div class="timer-display">
+        <!-- Progress Ring -->
+        <div class="progress-ring">
+          <svg viewBox="0 0 120 120">
+            <defs>
+              <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--primary)" />
+                <stop offset="100%" stop-color="var(--accent-lavender)" />
+              </linearGradient>
+            </defs>
+            <circle class="progress-bg" cx="60" cy="60" r="54" />
+            <circle class="progress-fill" cx="60" cy="60" r="54" 
+                    stroke-dasharray="339.292"
+                    [attr.stroke-dashoffset]="339.292 * (1 - getProgressPercentage() / 100)" />
+          </svg>
+        </div>
+
+        <!-- Floral Decoration -->
+        <div class="floral-decoration">
+          <div class="floral-element">🌸</div>
+          <div class="floral-element">🌿</div>
+          <div class="floral-element">✨</div>
+          <div class="floral-element">🦋</div>
+        </div>
+
+        <!-- Time Display -->
+        <div class="time-display">
+          <div class="time-big" aria-live="polite">
+            {{ formatTime() }}
+          </div>
+          <div class="time-label">Temps restant</div>
+        </div>
+      </div>
+
+      <!-- Timer Controls -->
+      <div class="timer-controls">
+        @if (!isRunning && !isPaused) {
+          <button 
+            class="control-btn primary-btn"
+            (click)="startTimer()"
+            aria-label="Démarrer le timer"
+          >
+            <span class="btn-icon">▶️</span>
+            <span>Démarrer</span>
+          </button>
+        }
+
+        @if (isRunning) {
+          <button 
+            class="control-btn secondary-btn"
+            (click)="pauseTimer()"
+            aria-label="Mettre en pause"
+          >
+            <span class="btn-icon">⏸️</span>
+            <span>Pause</span>
+          </button>
+        }
+
+        @if (isPaused) {
+          <button 
+            class="control-btn primary-btn"
+            (click)="resumeTimer()"
+            aria-label="Reprendre le timer"
+          >
+            <span class="btn-icon">▶️</span>
+            <span>Reprendre</span>
+          </button>
+        }
+
+        <button 
+          class="control-btn secondary-btn"
+          (click)="resetTimer()"
+          aria-label="Réinitialiser le timer"
+          [disabled]="!isRunning && !isPaused"
+        >
+          <span class="btn-icon">🔄</span>
+          <span>Réinitialiser</span>
+        </button>
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="mode-selector">
+        <button 
+          class="mode-btn"
+          [class.active]="currentMode === 'focus'"
+          (click)="switchMode('focus')"
+          aria-label="Mode concentration"
+        >
+          <span class="mode-btn-emoji">🎯</span>
+          <span>Concentration</span>
+        </button>
+
+        <button 
+          class="mode-btn"
+          [class.active]="currentMode === 'shortBreak'"
+          (click)="switchMode('shortBreak')"
+          aria-label="Mode pause courte"
+        >
+          <span class="mode-btn-emoji">☕</span>
+          <span>Pause courte</span>
+        </button>
+
+        <button 
+          class="mode-btn"
+          [class.active]="currentMode === 'longBreak'"
+          (click)="switchMode('longBreak')"
+          aria-label="Mode pause longue"
+        >
+          <span class="mode-btn-emoji">🌴</span>
+          <span>Pause longue</span>
+        </button>
+      </div>
+
+      <!-- Quick Time Settings -->
+      <div class="quick-time-section">
+        <label class="quick-time-label">Durées rapides</label>
+        <div class="quick-time-buttons">
+          @for (time of quickTimes; track time.value) {
+            <button 
+              class="quick-time-btn"
+              [class.active]="minutes === time.value"
+              (click)="quickSetTime(time.value)"
+              [attr.aria-label]="'Définir ' + time.label"
+            >
+              <span class="quick-time-emoji">{{ time.icon }}</span>
+              <span>{{ time.label }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Motivational Quote -->
+      <div class="motivational-quote">
+        <div class="quote-icon">"</div>
+        <p class="quote-text">{{ currentQuote }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column - Todo & Stats -->
+  <div class="todo-column">
+    <!-- Todo Card -->
+    <div class="todo-card">
+      <div class="todo-header">
+        <h3>📝 Mes Leçons</h3>
+        <p>Organisez vos sujets d'étude</p>
+      </div>
+
+      <!-- Todo Input -->
+      <div class="todo-input">
+        <input 
+          type="text" 
+          placeholder="Ajouter une nouvelle leçon..." 
+          [(ngModel)]="newTodoText"
+          (keydown.enter)="addTodo()"
+          aria-label="Nouvelle leçon à étudier"
+        />
+        <button 
+          class="add-btn"
+          (click)="addTodo()"
+          aria-label="Ajouter la leçon"
+        >
+          <span class="btn-icon">➕</span>
+          <span>Ajouter</span>
+        </button>
+      </div>
+
+      <!-- Todo List -->
+      <div class="todo-list">
+        <ul>
+          @for (item of todo.todos(); track item.id) {
+            <li 
+              class="todo-item"
+              [class.done]="item.done"
+            >
+              <div 
+                class="todo-checkbox"
+                [class.checked]="item.done"
+                (click)="toggleTodo(item.id)"
+                role="checkbox"
+                [attr.aria-checked]="item.done"
+                [attr.aria-label]="item.done ? 'Marquer comme non terminé' : 'Marquer comme terminé'"
+              ></div>
+              <span 
+                class="todo-text"
+                [class.done]="item.done"
+              >
+                {{ item.text }}
+              </span>
+              <button 
+                class="delete-btn"
+                (click)="removeTodo(item.id)"
+                aria-label="Supprimer cette leçon"
+              >
+                ✕
+              </button>
+            </li>
+          }
+
+          @empty {
+            <li class="empty-state">
+              Commencez par ajouter vos premières leçons 🌸
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Todo Footer -->
+      <div class="todo-footer">
+        <button 
+          class="clear-btn"
+          (click)="clearCompleted()"
+          [disabled]="completedCount() === 0"
+          aria-label="Supprimer toutes les leçons terminées"
+        >
+          <span class="btn-icon">🗑️</span>
+          <span>Nettoyer</span>
+        </button>
+        <div class="counter">
+          <span>{{ completedCount() }}</span>/<span>{{ totalCount() }}</span> terminées
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Card -->
+    <div class="stats-card">
+      <div class="stats-header">
+        <div class="stats-icon">📊</div>
+        <h3 class="stats-title">Mes Statistiques</h3>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-value">{{ sessionsCompleted }}</span>
+          <span class="stat-label">Sessions</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ totalFocusTime }}</span>
+          <span class="stat-label">Minutes</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ completedCount() }}</span>
+          <span class="stat-label">Tâches</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ totalCount() }}</span>
+          <span class="stat-label">Total</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Link -->
+  <div class="settings-link">
+    <a routerLink="/settings" class="settings-btn">
+      <span class="btn-icon">⚙️</span>
+      <span>Paramètres</span>
+    </a>
+  </div>
 </div>
