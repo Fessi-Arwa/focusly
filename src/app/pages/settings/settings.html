@@ -8,12 +8,12 @@
   </header>
 
   <!-- Navigation de retour -->
-  <div class="back-nav">
-    <a routerLink="/" class="back-btn">
-      <span class="back-icon">←</span>
-      <span>Retour au focus</span>
-    </a>
-  </div>
+  <div class="back-link">
+  <a routerLink="/" class="back-btn">
+    <span class="btn-icon">←</span>
+    <span>Focus</span>
+  </a>
+</div>
 
   <!-- Settings Grid -->
   <div class="settings-grid">
@@ -123,8 +123,10 @@
         </div>
       </div>
       
+      <!-- Section Son de notification UNIQUEMENT -->
       <div class="setting-group">
         <label class="setting-label">Son de notification</label>
+        <p class="setting-description">Cliquez sur un son pour le tester</p>
         <div class="sound-grid">
           @for (sound of sounds; track sound.id) {
             <div 
@@ -134,76 +136,19 @@
             >
               <span class="sound-icon">{{ sound.icon }}</span>
               <span class="sound-name">{{ sound.name }}</span>
+              <button 
+                class="sound-test-btn"
+                (click)="$event.stopPropagation(); testSound(sound.id)"
+                aria-label="Tester ce son"
+              >
+                ▶️
+              </button>
             </div>
           }
         </div>
       </div>
     </section>
 
-    <!-- Auto Start Settings -->
-    <section class="settings-card">
-      <div class="card-header">
-        <div class="card-icon">⚡</div>
-        <h2 class="card-title">Démarrage automatique</h2>
-      </div>
-      
-      <div class="toggle-group">
-        <div class="toggle-item">
-          <div class="toggle-label">
-            <span class="toggle-icon">🔄</span>
-            <span class="toggle-text">Auto-start pauses</span>
-          </div>
-          <label class="toggle-switch">
-            <input 
-              type="checkbox" 
-              [(ngModel)]="timerSettings.autoStartBreaks"
-              (change)="saveSettings()"
-            >
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        
-        <div class="toggle-item">
-          <div class="toggle-label">
-            <span class="toggle-icon">🎯</span>
-            <span class="toggle-text">Auto-start focus</span>
-          </div>
-          <label class="toggle-switch">
-            <input 
-              type="checkbox" 
-              [(ngModel)]="timerSettings.autoStartFocus"
-              (change)="saveSettings()"
-            >
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      </div>
-    </section>
-
-    <!-- Actions -->
-    <section class="settings-card">
-      <div class="card-header">
-        <div class="card-icon">⚙️</div>
-        <h2 class="card-title">Actions</h2>
-      </div>
-      
-      <div class="action-buttons">
-        <button 
-          class="action-btn primary"
-          (click)="saveSettings()"
-        >
-          <span class="action-icon">💾</span>
-          <span>Sauvegarder</span>
-        </button>
-        
-        <button 
-          class="action-btn secondary"
-          (click)="resetSettings()"
-        >
-          <span class="action-icon">🔄</span>
-          <span>Réinitialiser</span>
-        </button>
-      </div>
-    </section>
+  
   </div>
 </div>

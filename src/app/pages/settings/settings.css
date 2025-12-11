@@ -135,77 +135,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* Background Gallery */
-.background-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.background-item {
-  position: relative;
-  aspect-ratio: 1;
-  border-radius: var(--border-radius);
-  border: 2px solid rgba(255, 214, 220, 0.3);
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.background-item:hover {
-  transform: translateY(-3px) scale(1.02);
-  border-color: var(--primary);
-  box-shadow: var(--shadow-md);
-}
-
-.background-item.active {
-  border-color: var(--primary);
-  border-width: 3px;
-  box-shadow: 0 0 0 3px rgba(255, 183, 197, 0.2), var(--shadow-md);
-}
-
-.background-preview {
-  width: 100%;
-  height: 70%;
-  border-radius: 10px;
-  margin-bottom: 0.75rem;
-  background: var(--bg-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-}
-
-.background-label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-dark);
-  text-align: center;
-  line-height: 1.4;
-}
-
-.active-indicator {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, var(--primary), var(--accent-lavender));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 0.8rem;
-  box-shadow: 0 2px 8px rgba(255, 182, 193, 0.4);
-}
-
 /* Settings Controls */
 .setting-group {
   margin-bottom: 1.5rem;
@@ -636,6 +565,193 @@ input:checked + .toggle-slider:before {
     padding: 0.75rem;
     width: 48px;
     height: 48px;
+    justify-content: center;
+  }
+}
+/* Background Gallery - Modification pour 2 lignes de 3 */
+.background-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes fixes */
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.background-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--border-radius);
+  border: 2px solid rgba(255, 214, 220, 0.3);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem; /* Réduit le padding pour gagner de l'espace */
+}
+
+.background-preview {
+  width: 100%;
+  height: 70%;
+  border-radius: 8px; /* Légèrement réduit */
+  margin-bottom: 0.5rem; /* Réduit la marge */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem; /* Réduit la taille de l'icône */
+}
+
+.background-label {
+  font-size: 0.75rem; /* Texte plus petit */
+  font-weight: 500;
+  color: var(--text-dark);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.active-indicator {
+  position: absolute;
+  top: 0.3rem; /* Position ajustée */
+  right: 0.3rem;
+  width: 20px; /* Plus petit */
+  height: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--accent-lavender));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.7rem; /* Plus petit */
+  box-shadow: 0 2px 6px rgba(255, 182, 193, 0.4);
+}
+
+/* Responsive Design pour mobile */
+@media (max-width: 768px) {
+  .background-gallery {
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur mobile */
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .background-gallery {
+    grid-template-columns: repeat(2, 1fr); /* Toujours 2 colonnes sur très petit */
+    gap: 0.5rem;
+  }
+  
+  .background-item {
+    padding: 0.5rem;
+  }
+  
+  .background-preview {
+    font-size: 1.2rem;
+  }
+  
+  .background-label {
+    font-size: 0.7rem;
+  }
+}
+/* Son Test Button */
+.sound-test-btn {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: all 0.2s;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sound-test-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Ajustez le sound-option pour inclure le bouton */
+.sound-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(255, 214, 220, 0.4);
+  background: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.sound-option:hover .sound-test-btn {
+  opacity: 1;
+}
+
+
+.back-link {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 100;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 214, 220, 0.5);
+  border-radius: 50px;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 
+    0 4px 20px rgba(255, 182, 193, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+  font-family: 'Quicksand', sans-serif;
+}
+
+.back-btn:hover {
+  background: white;
+  border-color: var(--primary);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 6px 25px rgba(255, 182, 193, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.back-btn .btn-icon {
+  font-size: 1.2rem;
+  transition: transform var(--transition-normal);
+}
+
+.back-btn:hover .btn-icon {
+  transform: translateX(-3px);
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .back-link {
+    bottom: 1rem;
+    left: 1rem;
+  }
+  
+  .back-btn span:not(.btn-icon) {
+    display: none;
+  }
+  
+  .back-btn {
+    padding: 1rem;
+    width: 56px;
+    height: 56px;
     justify-content: center;
   }
 }

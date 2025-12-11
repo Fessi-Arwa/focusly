@@ -20,4 +20,7 @@ describe('Settings', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-});
+})
+
+
+;

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Background } from '../../services/background';
+import { AudioService } from '../../services/audio';
 
 @Component({
   selector: 'app-settings',
@@ -12,7 +13,6 @@ import { Background } from '../../services/background';
   styleUrls: ['./settings.css']
 })
 export class Settings implements OnInit {
-  // Paramètres du timer
   timerSettings = {
     focusDuration: 25,
     shortBreak: 5,
@@ -22,7 +22,6 @@ export class Settings implements OnInit {
     soundEnabled: true
   };
 
-  // Sons disponibles
   sounds = [
     { id: 'bell', name: 'Clochette Douce', icon: '🔔' },
     { id: 'chime', name: 'Carillon', icon: '🎵' },
@@ -30,8 +29,12 @@ export class Settings implements OnInit {
   ];
 
   selectedSound: string = 'bell';
+  audioEnabled = false;
 
-  constructor(public bg: Background) {}
+  constructor(
+    public bg: Background,
+    private audioService: AudioService
+  ) {}
 
   ngOnInit(): void {
     this.bg.apply();
@@ -46,12 +49,48 @@ export class Settings implements OnInit {
     return this.bg.bg() === id;
   }
 
+  testSound(soundId?: string): void {
+    if (!this.timerSettings.soundEnabled) {
+      this.showAlert('Activez d\'abord les sons dans les paramètres');
+      return;
+    }
+    
+    const soundToPlay = soundId || this.selectedSound;
+    
+    this.audioService.playSound(soundToPlay, 0.3);
+    
+    setTimeout(() => {
+      if (!this.audioEnabled) {
+        this.enableAudioFirst();
+      }
+    }, 100);
+  }
+
+  enableAudioFirst(): void {
+    if (confirm('L\'audio est bloqué par le navigateur. Voulez-vous l\'activer maintenant ?')) {
+      this.audioService.enableAudio().then(() => {
+        this.audioEnabled = true;
+        this.showAlert('Audio activé ! Vous pouvez maintenant tester les sons.');
+      }).catch(error => {
+        this.showAlert('Impossible d\'activer l\'audio. Vérifiez vos paramètres de navigateur.');
+      });
+    }
+  }
+
+  private showAlert(message: string): void {
+    alert(message);
+  }
+
   saveSettings(): void {
     const settings = {
       timer: this.timerSettings,
       sound: this.selectedSound
     };
     localStorage.setItem('focusly-settings', JSON.stringify(settings));
+    
+    if (this.timerSettings.soundEnabled) {
+      this.audioService.playSound('bell', 0.2);
+    }
   }
 
   loadSettings(): void {
@@ -76,6 +115,8 @@ export class Settings implements OnInit {
       };
       this.selectedSound = 'bell';
       this.bg.set('default');
+      
+      this.audioService.playSound('chime', 0.2);
     }
   }
 

@@ -23,6 +23,11 @@ export class Focus implements OnInit, OnDestroy {
   // Modes
   currentMode: 'focus' | 'shortBreak' | 'longBreak' = 'focus';
   
+  // Durées configurées
+  focusDuration: number = 25;
+  shortBreakDuration: number = 5;
+  longBreakDuration: number = 15;
+  
   // Statistiques
   sessionsCompleted: number = 0;
   totalFocusTime: number = 0;
@@ -72,7 +77,7 @@ export class Focus implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.bg.apply();
-    this.loadSettings();
+    this.loadSettings();  // Charger les paramètres
     this.updateMotivationalQuote();
     this.loadStatistics();
     
@@ -80,13 +85,72 @@ export class Focus implements OnInit, OnDestroy {
     setInterval(() => {
       this.updateMotivationalQuote();
     }, 30000);
+    
+    // Écouter les changements de paramètres (optionnel)
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'focusly-settings') {
+        this.loadSettings();
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.clearTimer();
+    window.removeEventListener('storage', () => {});
   }
 
-  // Méthodes Timer
+  // Charger les paramètres
+  private loadSettings(): void {
+    const saved = localStorage.getItem('focusly-settings');
+    if (saved) {
+      try {
+        const settings = JSON.parse(saved);
+        
+        if (settings.timer) {
+          // Charger les durées configurées
+          this.focusDuration = settings.timer.focusDuration || 25;
+          this.shortBreakDuration = settings.timer.shortBreak || 5;
+          this.longBreakDuration = settings.timer.longBreak || 15;
+          
+          // Appliquer la durée actuelle selon le mode
+          this.updateTimerDuration();
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des paramètres:', error);
+        this.resetToDefaults();
+      }
+    } else {
+      this.resetToDefaults();
+    }
+  }
+
+  // Réinitialiser aux valeurs par défaut
+  private resetToDefaults(): void {
+    this.focusDuration = 25;
+    this.shortBreakDuration = 5;
+    this.longBreakDuration = 15;
+    this.updateTimerDuration();
+  }
+
+  // Mettre à jour la durée du timer selon le mode
+  private updateTimerDuration(): void {
+    if (!this.isRunning && !this.isPaused) {
+      switch(this.currentMode) {
+        case 'focus':
+          this.minutes = this.focusDuration;
+          break;
+        case 'shortBreak':
+          this.minutes = this.shortBreakDuration;
+          break;
+        case 'longBreak':
+          this.minutes = this.longBreakDuration;
+          break;
+      }
+      this.seconds = 0;
+    }
+  }
+
+  // Méthodes Timer (gardez les mêmes mais avec mise à jour)
   startTimer(): void {
     if (this.minutes <= 0) return;
     
@@ -127,7 +191,7 @@ export class Focus implements OnInit, OnDestroy {
     this.clearTimer();
     this.isRunning = false;
     this.isPaused = false;
-    this.loadSettings();
+    this.updateTimerDuration(); // Charger la durée configurée
   }
 
   quickSetTime(minutes: number): void {
@@ -140,18 +204,7 @@ export class Focus implements OnInit, OnDestroy {
 
   switchMode(mode: 'focus' | 'shortBreak' | 'longBreak'): void {
     this.currentMode = mode;
-    switch(mode) {
-      case 'focus':
-        this.minutes = 25;
-        break;
-      case 'shortBreak':
-        this.minutes = 5;
-        break;
-      case 'longBreak':
-        this.minutes = 15;
-        break;
-    }
-    this.seconds = 0;
+    this.updateTimerDuration(); // Utiliser les durées configurées
     this.resetTimer();
   }
 
@@ -182,7 +235,7 @@ export class Focus implements OnInit, OnDestroy {
     }
   }
 
-  // Méthodes Todo
+  // Méthodes Todo (gardez les mêmes)
   addTodo(): void {
     if (this.newTodoText.trim()) {
       this.todo.add(this.newTodoText);
@@ -213,9 +266,15 @@ export class Focus implements OnInit, OnDestroy {
   getProgressPercentage(): number {
     let totalSeconds = 0;
     switch(this.currentMode) {
-      case 'focus': totalSeconds = 25 * 60; break;
-      case 'shortBreak': totalSeconds = 5 * 60; break;
-      case 'longBreak': totalSeconds = 15 * 60; break;
+      case 'focus': 
+        totalSeconds = this.focusDuration * 60; 
+        break;
+      case 'shortBreak': 
+        totalSeconds = this.shortBreakDuration * 60; 
+        break;
+      case 'longBreak': 
+        totalSeconds = this.longBreakDuration * 60; 
+        break;
     }
     
     const currentSeconds = this.minutes * 60 + this.seconds;
@@ -227,17 +286,6 @@ export class Focus implements OnInit, OnDestroy {
   private updateMotivationalQuote(): void {
     const randomIndex = Math.floor(Math.random() * this.motivationalQuotes.length);
     this.currentQuote = this.motivationalQuotes[randomIndex];
-  }
-
-  // Settings
-  private loadSettings(): void {
-    const saved = localStorage.getItem('focusly-settings');
-    if (saved) {
-      const settings = JSON.parse(saved);
-      if (settings.timer) {
-        this.minutes = settings.timer.focusDuration || 25;
-      }
-    }
   }
 
   // Statistiques

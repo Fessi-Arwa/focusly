@@ -45,7 +45,26 @@ export class Background {
       label: 'Jardin Fleuri', 
       icon: '🌷',
       color: 'linear-gradient(135deg, #FFD1DC, #B5EAD7)'
-    }
+    },
+  
+  {
+    id: 'gradient4',
+    label: 'Lavande',
+    color: 'linear-gradient(135deg, #E2D1F9, #D8BFD8)',
+    icon: '💜'
+  },
+  {
+    id: 'gradient5',
+    label: 'Pêche Crémeuse',
+    color: 'linear-gradient(135deg, #FFD8B1, #FFB7B2)',
+    icon: '🍑'
+  },
+  {
+    id: 'gradient6',
+    label: 'Bleu Azur',
+    color: 'linear-gradient(135deg, #A7C7E7, #B5EAD7)',
+    icon: '💎'
+  }
   ];
 
   set(bgName: string): void {

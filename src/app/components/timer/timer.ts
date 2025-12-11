@@ -1,33 +1,70 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Timer } from '../../services/timer';
+// services/timer.ts
+import { Injectable } from '@angular/core';
 
-@Component({
-  selector: 'app-timer',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './timer.html',
-  styleUrls: ['./timer.css']
+@Injectable({
+  providedIn: 'root'
 })
-export class TimerComponent {
-  minutes = Number(localStorage.getItem('focusly_last_minutes') || 25);
+export class Timer {
+  private startTime: number = 0;
+  private duration: number = 0;
+  private pausedTime: number = 0;
+  private isRunningFlag: boolean = false;
 
-  constructor(public timer: Timer) {}
-
-  start() {
-    const mins = Math.max(1, Math.floor(this.minutes));
-    localStorage.setItem('focusly_last_minutes', String(mins));
-    this.timer.start(mins * 60);
+  // Ajoutez ces méthodes publiques
+  remaining(): number {
+    if (!this.isRunningFlag) {
+      return Math.max(0, this.duration);
+    }
+    const elapsed = (Date.now() - this.startTime) / 1000;
+    return Math.max(0, this.duration - elapsed);
   }
 
-  pause() { this.timer.pause(); }
-  resume() { this.timer.resume(); }
-  reset() { this.timer.reset(); }
+  running(): boolean {
+    return this.isRunningFlag;
+  }
 
-  formatTime(sec: number) {
-    const m = Math.floor(sec / 60).toString().padStart(2, '0');
-    const s = Math.max(0, sec % 60).toString().padStart(2, '0');
-    return `${m}:${s}`;
+  start(durationInSeconds: number) {
+    this.duration = durationInSeconds;
+    this.startTime = Date.now();
+    this.isRunningFlag = true;
+    this.pausedTime = 0;
+  }
+
+  pause() {
+    if (this.isRunningFlag) {
+      this.pausedTime = this.remaining();
+      this.isRunningFlag = false;
+    }
+  }
+
+  resume() {
+    if (!this.isRunningFlag && this.pausedTime > 0) {
+      this.duration = this.pausedTime;
+      this.startTime = Date.now();
+      this.isRunningFlag = true;
+    }
+  }
+
+  reset() {
+    this.isRunningFlag = false;
+    this.duration = 0;
+    this.pausedTime = 0;
+    this.startTime = 0;
+  }
+}
+// Dans votre timer.component.ts
+import { AudioService } from '../../services/audio';
+
+export class TimerComponent {
+  constructor(private audioService: AudioService) {}
+
+  // Quand le timer se termine
+  onTimerComplete() {
+    // Charge les paramètres
+    const settings = JSON.parse(localStorage.getItem('focusly-settings') || '{}');
+    
+    if (settings.timer?.soundEnabled) {
+      this.audioService.playSound(settings.sound || 'bell', 0.5);
+    }
   }
 }
