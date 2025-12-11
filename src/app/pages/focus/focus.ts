@@ -1,3 +1,4 @@
+
 import { Component, OnInit, OnDestroy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +31,10 @@ export class Focus implements OnInit, OnDestroy {
   
   // Statistiques
   sessionsCompleted: number = 0;
-  totalFocusTime: number = 0;
+  totalFocusTime: number = 0; // Ceci est le TOTAL cumulé en minutes
+  
+  // Pour garder la durée de la session actuelle
+  private currentSessionDuration: number = 25;
   
   // Todo
   newTodoText: string = '';
@@ -138,6 +142,7 @@ export class Focus implements OnInit, OnDestroy {
       switch(this.currentMode) {
         case 'focus':
           this.minutes = this.focusDuration;
+          this.currentSessionDuration = this.focusDuration; // Stocker la durée
           break;
         case 'shortBreak':
           this.minutes = this.shortBreakDuration;
@@ -150,12 +155,17 @@ export class Focus implements OnInit, OnDestroy {
     }
   }
 
-  // Méthodes Timer (gardez les mêmes mais avec mise à jour)
+  // Méthodes Timer
   startTimer(): void {
     if (this.minutes <= 0) return;
     
     this.isRunning = true;
     this.isPaused = false;
+    
+    // Stocker la durée de la session qui commence
+    if (this.currentMode === 'focus') {
+      this.currentSessionDuration = this.minutes;
+    }
     
     const totalSeconds = this.minutes * 60 + this.seconds;
     let remainingSeconds = totalSeconds;
@@ -197,6 +207,12 @@ export class Focus implements OnInit, OnDestroy {
   quickSetTime(minutes: number): void {
     this.minutes = minutes;
     this.seconds = 0;
+    
+    // Mettre à jour la durée de session si on est en mode focus
+    if (this.currentMode === 'focus') {
+      this.currentSessionDuration = minutes;
+    }
+    
     if (this.isRunning) {
       this.resetTimer();
     }
@@ -213,11 +229,17 @@ export class Focus implements OnInit, OnDestroy {
     
     if (this.currentMode === 'focus') {
       this.sessionsCompleted++;
-      this.totalFocusTime += this.minutes;
+      
+      // CORRECTION ICI : Ajouter la durée réelle de la session (stockée au début)
+      this.totalFocusTime += this.currentSessionDuration;
+      
+      // Sauvegarder les statistiques
       this.saveStatistics();
       
       // Notification
-      this.showNotification('Session terminée ! 🎉', 'Prenez une pause bien méritée.');
+      this.showNotification('Session terminée ! 🎉', `Vous avez terminé une session de ${this.currentSessionDuration} minutes !`);
+    } else {
+      this.showNotification('Pause terminée ! ⏰', 'Retour au travail !');
     }
     
     // Auto-switch mode
@@ -235,7 +257,7 @@ export class Focus implements OnInit, OnDestroy {
     }
   }
 
-  // Méthodes Todo (gardez les mêmes)
+  // Méthodes Todo
   addTodo(): void {
     if (this.newTodoText.trim()) {
       this.todo.add(this.newTodoText);
@@ -292,19 +314,42 @@ export class Focus implements OnInit, OnDestroy {
   private loadStatistics(): void {
     const saved = localStorage.getItem('focusly-statistics');
     if (saved) {
-      const stats = JSON.parse(saved);
-      this.sessionsCompleted = stats.sessionsCompleted || 0;
-      this.totalFocusTime = stats.totalFocusTime || 0;
+      try {
+        const stats = JSON.parse(saved);
+        this.sessionsCompleted = stats.sessionsCompleted || 0;
+        this.totalFocusTime = stats.totalFocusTime || 0;
+        
+        console.log('Statistiques chargées:', {
+          sessions: this.sessionsCompleted,
+          minutes: this.totalFocusTime
+        });
+      } catch (error) {
+        console.error('Erreur lors du chargement des statistiques:', error);
+        this.resetStatistics();
+      }
     }
   }
 
   private saveStatistics(): void {
-    const stats = {
-      sessionsCompleted: this.sessionsCompleted,
-      totalFocusTime: this.totalFocusTime,
-      lastUpdated: new Date().toISOString()
-    };
-    localStorage.setItem('focusly-statistics', JSON.stringify(stats));
+    try {
+      const stats = {
+        sessionsCompleted: this.sessionsCompleted,
+        totalFocusTime: this.totalFocusTime,
+        lastUpdated: new Date().toISOString()
+      };
+      
+      localStorage.setItem('focusly-statistics', JSON.stringify(stats));
+      
+      console.log('Statistiques sauvegardées:', stats);
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde des statistiques:', error);
+    }
+  }
+
+  private resetStatistics(): void {
+    this.sessionsCompleted = 0;
+    this.totalFocusTime = 0;
+    localStorage.removeItem('focusly-statistics');
   }
 
   // Notifications
@@ -336,6 +381,14 @@ export class Focus implements OnInit, OnDestroy {
       case 'focus': return '🎯';
       case 'shortBreak': return '☕';
       case 'longBreak': return '🌴';
+    }
+  }
+  
+  // Méthode pour réinitialiser les statistiques (utile pour le débogage)
+  resetAllStats(): void {
+    if (confirm('Voulez-vous vraiment réinitialiser toutes vos statistiques ?')) {
+      this.resetStatistics();
+      alert('Statistiques réinitialisées !');
     }
   }
 }
